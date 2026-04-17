@@ -2,9 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import ScrollToTop from './utils/ScrollToTop';
-import axios from 'axios';
-axios.defaults.baseURL = 'https://nyla-backend.onrender.com';
-// Layout & UI Components
+
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
 import CartDrawer from './pages/CartDrawer';
