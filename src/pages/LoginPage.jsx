@@ -124,7 +124,6 @@ function LoginPage() {
                             type="button"
                             onClick={() => {
                                 setIsLoginMode(!isLoginMode);
-                                setError(null);
                             }}
                             className="text-burgundy-800 font-semibold hover:underline"
                         >
