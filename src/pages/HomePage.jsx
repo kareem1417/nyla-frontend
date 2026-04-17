@@ -14,7 +14,7 @@ function HomePage() {
             <section
                 className="relative pt-28 pb-32 px-6 md:pt-32 md:pb-40 md:px-16 lg:px-24 overflow-hidden bg-cover bg-[80%_center] md:bg-center bg-no-repeat flex items-center min-h-[550px] md:min-h-[700px]"
                 style={{
-                    backgroundImage: `linear-gradient(rgba(250, 248, 246, 0), rgba(128, 0, 32, 0.56)), url('./src/assets/cover.jpg')`
+                    backgroundImage: `linear-gradient(rgba(250, 248, 246, 0), rgba(128, 0, 32, 0.56)), url('./cover.jpg')`
                 }}
             >
                 <div className="absolute inset-0 bg-[#FAF8F6]/60 backdrop-blur-[2px] md:hidden"></div>
