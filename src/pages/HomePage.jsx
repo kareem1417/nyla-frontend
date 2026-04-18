@@ -40,6 +40,9 @@ function HomePage() {
                     <span className="mx-8">✨ Cruelty Free</span>
                     <span className="mx-8">✨ Handcrafted in Egypt</span>
                     <span className="mx-8">✨ Free Shipping on orders over 1000 EGP</span>
+                    <span className="mx-8">✨ Beta Version </span>
+
+
                 </div>
             </div>
 
