@@ -47,7 +47,9 @@ function Navbar() {
                         <Link to="/" className="text-3xl font-display text-ink tracking-tight hover:text-burgundy-800 transition-colors">
                             NYLA
                         </Link>
-                        <span className="text-sm font-medium text-stone hover:text-burgundy-800 transition-colors uppercase tracking-wider">Beta Version</span>
+                        <span className="bg-pink-100 text-pink-800 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                            Beta
+                        </span>
                     </div>
 
                     <div className="hidden md:flex flex-1 justify-center items-center gap-8 lg:gap-12">
