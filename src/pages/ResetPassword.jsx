@@ -21,7 +21,7 @@ function ResetPassword() {
 
         setIsLoading(true);
         try {
-            await axios.put(`http://localhost:5000/api/users/resetpassword/${token}`, { password });
+            await axios.put(`https://nyla-backend.onrender.com/api/users/resetpassword/${token}`, { password });
             setIsSuccess(true);
             toast.success("Password reset successfully! 🎉");
 

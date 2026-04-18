@@ -16,7 +16,7 @@ function AboutPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-24">
                 <div className="aspect-[4/5]">
                     <img
-                        src="./src/assets/ab.png"
+                        src="./ab.png"
                         alt="Natural Ingredients"
                         className="w-full h-full object-cover"
                     />

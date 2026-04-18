@@ -10,7 +10,7 @@ function CategoriesPage() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/categories');
+                const { data } = await axios.get('https://nyla-backend.onrender.com/api/categories');
                 setCategories(data);
             } catch (err) {
                 setError('Failed to load collections. Please try again later.');

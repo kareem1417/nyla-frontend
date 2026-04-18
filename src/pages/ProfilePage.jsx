@@ -47,7 +47,7 @@ function ProfilePage() {
     const fetchMyOrders = async (token) => {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const { data } = await axios.get('http://localhost:5000/api/orders/myorders', config);
+            const { data } = await axios.get('https://nyla-backend.onrender.com/api/orders/myorders', config);
             setOrders(data);
         } catch (error) {
             toast.error('Failed to load your orders.');
@@ -61,7 +61,7 @@ function ProfilePage() {
         setUpdatingProfile(true);
         try {
             const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-            const { data } = await axios.put('http://localhost:5000/api/users/profile', formData, config);
+            const { data } = await axios.put('https://nyla-backend.onrender.com/api/users/profile', formData, config);
 
             localStorage.setItem('userInfo', JSON.stringify(data));
             setUserInfo(data);

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Tags, Plus, Trash2, UploadCloud, Image as ImageIcon } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function AdminCategories() {
     const [categories, setCategories] = useState([]);
     const [name, setName] = useState('');
@@ -13,7 +13,7 @@ function AdminCategories() {
 
     const fetchCategories = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/categories');
+            const { data } = await axios.get(`${BASE_URL}/api/categories`);
             setCategories(data);
         } catch (error) {
             toast.error('Failed to fetch categories');
@@ -36,7 +36,7 @@ function AdminCategories() {
 
         try {
             const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-            const { data } = await axios.post('http://localhost:5000/api/upload', formData, config);
+            const { data } = await axios.post(`${BASE_URL}/api/upload`, formData, config);
             setImageUrl(data.url);
             toast.success('Category image uploaded! 📸');
         } catch (error) {
@@ -57,7 +57,7 @@ function AdminCategories() {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
 
-            const { data } = await axios.post('http://localhost:5000/api/categories', { name, imageUrl, description }, config);
+            const { data } = await axios.post(`${BASE_URL}/api/categories`, { name, imageUrl, description }, config);
 
             setCategories([...categories, data]);
             setName('');
@@ -76,7 +76,7 @@ function AdminCategories() {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
 
-            await axios.delete(`http://localhost:5000/api/categories/${id}`, config);
+            await axios.delete(`${BASE_URL}/api/categories/${id}`, config);
 
             setCategories(categories.filter((c) => c._id !== id));
             toast.success('Category deleted! 🗑️');

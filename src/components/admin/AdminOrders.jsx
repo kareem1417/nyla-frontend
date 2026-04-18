@@ -15,7 +15,7 @@ function AdminOrders() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get('http://localhost:5000/api/orders', config);
+            const { data } = await axios.get('https://nyla-backend.onrender.com/api/orders', config);
             setOrders(data);
         } catch (error) {
             toast.error('Failed to fetch orders');
@@ -39,7 +39,7 @@ function AdminOrders() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            await axios.put(`http://localhost:5000/api/orders/${id}/${action}`, {}, config);
+            await axios.put(`https://nyla-backend.onrender.com/api/orders/${id}/${action}`, {}, config);
 
             toast.success(`Order marked as ${action.toUpperCase()}!`);
             fetchOrders();

@@ -18,7 +18,7 @@ function AdminUsers() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get('http://localhost:5000/api/users', config);
+            const { data } = await axios.get('https://nyla-backend.onrender.com/api/users', config);
             setUsers(data);
         } catch (error) {
             toast.error('Failed to load users');
@@ -37,7 +37,7 @@ function AdminUsers() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get(`http://localhost:5000/api/users/${userId}/details`, config);
+            const { data } = await axios.get(`https://nyla-backend.onrender.com/api/users/${userId}/details`, config);
             setSelectedUser(data);
         } catch (error) {
             toast.error('Failed to load user details');

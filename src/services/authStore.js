@@ -12,14 +12,14 @@ export const useAuthStore = create((set) => ({
     login: async (email, password) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await fetch('http://localhost:5000/api/users/login', {
+            const response = await fetch('https://nyla-backend.onrender.com/api/users/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
             });
 
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message || 'فشل تسجيل الدخول');
+            if (!response.ok) throw new Error(data.message || 'Failed to login');
 
             localStorage.setItem('userInfo', JSON.stringify(data));
             set({ user: data, isLoading: false });
@@ -33,14 +33,14 @@ export const useAuthStore = create((set) => ({
     register: async (userData) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await fetch('http://localhost:5000/api/users', {
+            const response = await fetch('https://nyla-backend.onrender.com/api/users', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),
             });
 
             const data = await response.json();
-            if (!response.ok) throw new Error(data.message || 'فشل إنشاء الحساب');
+            if (!response.ok) throw new Error(data.message || 'Failed to create account');
 
             localStorage.setItem('userInfo', JSON.stringify(data));
             set({ user: data, isLoading: false });

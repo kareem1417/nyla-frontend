@@ -12,7 +12,7 @@ function AdminDashboard() {
             try {
                 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-                const { data } = await axios.get('http://localhost:5000/api/orders/stats', config);
+                const { data } = await axios.get('https://nyla-backend.onrender.com/api/orders/stats', config);
                 setStats(data);
             } catch (error) {
                 console.error("Stats Error", error);

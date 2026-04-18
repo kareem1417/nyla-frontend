@@ -22,7 +22,7 @@ function OrdersPage() {
             if (!user) return;
 
             try {
-                const response = await fetch('http://localhost:5000/api/orders/myorders', {
+                const response = await fetch('https://nyla-backend.onrender.com/api/orders/myorders', {
                     headers: {
                         // هنا السحر: بنبعت الـ Token في الهيدر عشان "الحارس" يعدينا
                         Authorization: `Bearer ${user.token}`,
@@ -30,7 +30,7 @@ function OrdersPage() {
                 });
 
                 if (!response.ok) {
-                    throw new Error('مقدرناش نجيب الأوردرات، حاول تاني');
+                    throw new Error('Failed to load orders, please try again later.');
                 }
 
                 const data = await response.json();

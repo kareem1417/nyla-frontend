@@ -10,7 +10,7 @@ function AdminSettings() {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/settings');
+                const { data } = await axios.get('https://nyla-backend.onrender.com/api/settings');
                 setShippingFee(data.shippingFee);
             } catch (error) {
                 console.error("Error fetching settings", error);
@@ -26,7 +26,7 @@ function AdminSettings() {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
 
-            await axios.put('http://localhost:5000/api/settings', { shippingFee: Number(shippingFee) }, config);
+            await axios.put('https://nyla-backend.onrender.com/api/settings', { shippingFee: Number(shippingFee) }, config);
             toast.success("Shipping fee updated successfully! 🚚");
         } catch (error) {
             toast.error("Failed to update shipping fee!");

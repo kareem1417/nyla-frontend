@@ -15,7 +15,7 @@ function ForgotPassword() {
 
         setIsLoading(true);
         try {
-            await axios.post('http://localhost:5000/api/users/forgotpassword', { email });
+            await axios.post('https://nyla-backend.onrender.com/api/users/forgotpassword', { email });
             setIsSent(true);
             toast.success("Reset link sent to your email! ✉️");
         } catch (error) {

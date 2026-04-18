@@ -21,7 +21,7 @@ function AdminProducts() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const { data } = await axios.get('http://localhost:5000/api/categories');
+                const { data } = await axios.get('https://nyla-backend.onrender.com/api/categories');
                 setCategories(data);
             } catch (error) {
                 console.error("Failed to load categories", error);
@@ -41,7 +41,7 @@ function AdminProducts() {
 
         try {
             const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-            const { data } = await axios.post('http://localhost:5000/api/upload', formDataToUpload, config);
+            const { data } = await axios.post('https://nyla-backend.onrender.com/api/upload', formDataToUpload, config);
 
             setFormData({ ...formData, imageUrl: data.url });
             toast.success('Image uploaded successfully! 📸');
