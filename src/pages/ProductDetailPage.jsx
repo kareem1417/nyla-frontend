@@ -12,7 +12,7 @@ function ProductDetailPage() {
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const availableStock = selectedVariant ? selectedVariant.stock : (product?.stock || 100);
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [isWishlisted, setIsWishlisted] = useState(false);
@@ -74,7 +74,7 @@ function ProductDetailPage() {
     }, [id]);
 
     const updateQuantity = (newQty) => {
-        if (!selectedVariant) return;
+        //if (!selectedVariant) return;
         if (newQty < 1) return;
         if (newQty > selectedVariant.stock) return;
         setQuantity(newQty);
@@ -234,11 +234,21 @@ function ProductDetailPage() {
                         <div className="flex items-center gap-4 mb-6">
                             <p className="text-sm text-stone font-medium">Quantity:</p>
                             <div className="flex items-center gap-1 border border-petal-gray rounded-full px-1 py-1 bg-white">
-                                <button onClick={() => updateQuantity(quantity - 1)} className="p-1.5 rounded-full text-stone hover:text-burgundy-800 hover:bg-burgundy-50 disabled:opacity-30 transition-colors" disabled={selectedVariant?.stock === 0 || quantity <= 1}>
+                                <button
+                                    onClick={() => updateQuantity(quantity - 1)}
+                                    className="p-1.5 rounded-full text-stone hover:text-burgundy-800 hover:bg-burgundy-50 disabled:opacity-30 transition-colors"
+                                    disabled={availableStock === 0 || quantity <= 1}
+                                >
                                     <Minus size={16} />
                                 </button>
+
                                 <span className="text-ink font-semibold text-lg w-10 text-center">{quantity}</span>
-                                <button onClick={() => updateQuantity(quantity + 1)} className="p-1.5 rounded-full text-stone hover:text-burgundy-800 hover:bg-burgundy-50 disabled:opacity-30 transition-colors" disabled={selectedVariant?.stock === 0 || quantity >= selectedVariant?.stock}>
+
+                                <button
+                                    onClick={() => updateQuantity(quantity + 1)}
+                                    className="p-1.5 rounded-full text-stone hover:text-burgundy-800 hover:bg-burgundy-50 disabled:opacity-30 transition-colors"
+                                    disabled={availableStock === 0 || quantity >= availableStock}
+                                >
                                     <Plus size={16} />
                                 </button>
                             </div>
