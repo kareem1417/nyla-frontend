@@ -12,7 +12,6 @@ function ProductDetailPage() {
     const [product, setProduct] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const availableStock = selectedVariant ? selectedVariant.stock : (product?.stock || 100);
     const [selectedVariant, setSelectedVariant] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [isWishlisted, setIsWishlisted] = useState(false);
@@ -72,11 +71,11 @@ function ProductDetailPage() {
         fetchProductDetails();
         window.scrollTo(0, 0);
     }, [id]);
-
+    const availableStock = selectedVariant ? selectedVariant.stock : (product?.stock || 100);
     const updateQuantity = (newQty) => {
         //if (!selectedVariant) return;
         if (newQty < 1) return;
-        if (newQty > selectedVariant.stock) return;
+        if (newQty > availableStock) return;
         setQuantity(newQty);
     };
 
