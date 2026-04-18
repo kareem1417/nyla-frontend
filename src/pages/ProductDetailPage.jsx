@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { Heart, ShoppingCart, Plus, Minus, CheckCircle, ChevronDown, Star, User } from 'lucide-react';
 import { useCartStore } from '../services/cartStore';
 import ProductCard from '../components/ui/ProductCard';
-
+import BASE_URL from '../../config';
 function ProductDetailPage() {
     const { id } = useParams();
 
@@ -42,7 +42,7 @@ function ProductDetailPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const response = await fetch(`https://nyla-backend.onrender.com/api/products/${id}`);
+            const response = await fetch(`${BASE_URL}/api/products/${id}`);
             if (!response.ok) throw new Error('Product not found');
             const data = await response.json();
             setProduct(data);
@@ -53,7 +53,7 @@ function ProductDetailPage() {
             }
 
             // جلب المنتجات المشابهة
-            const relatedRes = await fetch(`https://nyla-backend.onrender.com/api/products/${id}/related`);
+            const relatedRes = await fetch(`${BASE_URL}/api/products/${id}/related`);
             if (relatedRes.ok) {
                 const relatedData = await relatedRes.json();
                 if (Array.isArray(relatedData)) {
@@ -104,7 +104,7 @@ function ProductDetailPage() {
         setIsSubmittingReview(true);
         try {
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            await axios.post(`https://nyla-backend.onrender.com/api/products/${id}/reviews`, { rating, comment }, config);
+            await axios.post(`${BASE_URL}/api/products/${id}/reviews`, { rating, comment }, config);
 
             toast.success("Review submitted successfully! 🎉");
             setRating(0);

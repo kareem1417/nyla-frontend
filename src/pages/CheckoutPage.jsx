@@ -4,7 +4,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Tag, X, CheckCircle2 } from 'lucide-react';
 import { useCartStore } from '../services/cartStore';
-
+import BASE_URL from '../../config';
 function CheckoutPage() {
     const navigate = useNavigate();
     const { cartItems, clearCart, cartTotal, shippingFee, fetchShippingFee } = useCartStore();
@@ -47,7 +47,7 @@ function CheckoutPage() {
         setIsVerifyingCoupon(true);
         try {
             const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-            const { data } = await axios.post('https://nyla-backend.onrender.com/api/coupons/verify', { code: couponCodeInput }, config);
+            const { data } = await axios.post(`${BASE_URL}/api/coupons/verify`, { code: couponCodeInput }, config);
             setAppliedCoupon({ code: data.code, discountPercentage: data.discountPercentage });
             toast.success(data.message);
         } catch (error) {
@@ -100,7 +100,7 @@ function CheckoutPage() {
                 },
             };
 
-            const { data } = await axios.post('https://nyla-backend.onrender.com/api/orders', orderData, config);
+            const { data } = await axios.post(`${BASE_URL}/api/orders`, orderData, config);
             toast.success('Order placed successfully! 🎉');
             clearCart();
             navigate('/order-success', { state: { order: data } });

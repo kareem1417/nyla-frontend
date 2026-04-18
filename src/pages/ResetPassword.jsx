@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Lock, ArrowRight } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function ResetPassword() {
     const { token } = useParams();
     const navigate = useNavigate();
@@ -21,7 +21,7 @@ function ResetPassword() {
 
         setIsLoading(true);
         try {
-            await axios.put(`https://nyla-backend.onrender.com/api/users/resetpassword/${token}`, { password });
+            await axios.put(`${BASE_URL}/api/users/resetpassword/${token}`, { password });
             setIsSuccess(true);
             toast.success("Password reset successfully! 🎉");
 

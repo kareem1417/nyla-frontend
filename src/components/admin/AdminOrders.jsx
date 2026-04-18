@@ -3,7 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Package, CheckCircle, Clock, Truck, Eye, X, XCircle, Printer } from 'lucide-react';
 import InvoiceTicket from '../../components/InvoiceTicket';
-
+import BASE_URL from '../../config';
 function AdminOrders() {
     const [orders, setOrders] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -15,7 +15,7 @@ function AdminOrders() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get('https://nyla-backend.onrender.com/api/orders', config);
+            const { data } = await axios.get(`${BASE_URL}/api/orders`, config);
             setOrders(data);
         } catch (error) {
             toast.error('Failed to fetch orders');
@@ -39,7 +39,7 @@ function AdminOrders() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            await axios.put(`https://nyla-backend.onrender.com/api/orders/${id}/${action}`, {}, config);
+            await axios.put(`${BASE_URL}/api/orders/${id}/${action}`, {}, config);
 
             toast.success(`Order marked as ${action.toUpperCase()}!`);
             fetchOrders();
@@ -181,7 +181,6 @@ function AdminOrders() {
                     </div>
                 </div>
 
-                {/* Modal التفاصيل */}
                 {isModalOpen && selectedOrder && (
                     <div className="fixed inset-0 bg-ink/40 backdrop-blur-sm z-50 flex justify-center items-center p-4">
                         <div className="bg-white rounded-2xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto animate-fade-in">

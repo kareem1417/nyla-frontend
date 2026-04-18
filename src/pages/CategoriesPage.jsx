@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-
+import BASE_URL from '../../config';
 function CategoriesPage() {
     const [categories, setCategories] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -10,7 +10,7 @@ function CategoriesPage() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const { data } = await axios.get('https://nyla-backend.onrender.com/api/categories');
+                const { data } = await axios.get(`${BASE_URL}/api/categories`);
                 setCategories(data);
             } catch (err) {
                 setError('Failed to load collections. Please try again later.');

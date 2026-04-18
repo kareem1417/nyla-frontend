@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { DollarSign, ShoppingCart, Package, Truck, TrendingUp, Award } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function AdminDashboard() {
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ function AdminDashboard() {
             try {
                 const userInfo = JSON.parse(localStorage.getItem('userInfo'));
                 const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-                const { data } = await axios.get('https://nyla-backend.onrender.com/api/orders/stats', config);
+                const { data } = await axios.get(`${BASE_URL}/api/orders/stats`, config);
                 setStats(data);
             } catch (error) {
                 console.error("Stats Error", error);

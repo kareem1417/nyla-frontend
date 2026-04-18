@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Ticket, Plus, Trash2, Calendar, Users, Hash, Percent } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function AdminCoupons() {
     const [coupons, setCoupons] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +18,7 @@ function AdminCoupons() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get('https://nyla-backend.onrender.com/api/coupons', config);
+            const { data } = await axios.get(`${BASE_URL}/api/coupons`, config);
             setCoupons(data);
         } catch (error) {
             toast.error('Failed to load coupons');
@@ -37,7 +37,7 @@ function AdminCoupons() {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
 
-            const { data } = await axios.post('https://nyla-backend.onrender.com/api/coupons', newCoupon, config);
+            const { data } = await axios.post(`${BASE_URL}/api/coupons`, newCoupon, config);
 
             setCoupons([...coupons, data]);
             setNewCoupon({ code: '', discountPercentage: '', expiryDate: '', usageLimit: 1, targetUser: '' });
@@ -52,7 +52,7 @@ function AdminCoupons() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            await axios.delete(`https://nyla-backend.onrender.com/api/coupons/${id}`, config);
+            await axios.delete(`${BASE_URL}/api/coupons/${id}`, config);
             setCoupons(coupons.filter(c => c._id !== id));
             toast.success('Coupon deleted 🗑️');
         } catch (error) {

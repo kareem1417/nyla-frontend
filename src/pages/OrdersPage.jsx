@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Package, Clock, CheckCircle, Truck, XCircle, ShoppingBag } from 'lucide-react';
 import { useAuthStore } from '../store/authStore';
-
+import BASE_URL from '../../config';
 function OrdersPage() {
     const navigate = useNavigate();
     const { user } = useAuthStore();
@@ -22,7 +22,7 @@ function OrdersPage() {
             if (!user) return;
 
             try {
-                const response = await fetch('https://nyla-backend.onrender.com/api/orders/myorders', {
+                const response = await fetch(`${BASE_URL}/api/orders/myorders`, {
                     headers: {
                         // هنا السحر: بنبعت الـ Token في الهيدر عشان "الحارس" يعدينا
                         Authorization: `Bearer ${user.token}`,

@@ -72,7 +72,7 @@ function LoginPage() {
                                         value={formData.phone}
                                         onChange={handleInputChange}
                                         pattern="^01[0125][0-9]{8}$"
-                                        maxLength="11"              // قيد: أقصى حاجة 11 رقم
+                                        maxLength="11"              
                                         title="Please enter a valid Egyptian phone number (e.g., 01012345678)"
                                         className="w-full border border-petal-gray rounded-xl px-4 py-3 focus:outline-none focus:border-burgundy-800 transition-colors"
                                         placeholder="01xxxxxxxxx"

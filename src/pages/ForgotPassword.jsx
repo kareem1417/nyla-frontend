@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Mail, ArrowLeft } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function ForgotPassword() {
     const [email, setEmail] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -15,7 +15,7 @@ function ForgotPassword() {
 
         setIsLoading(true);
         try {
-            await axios.post('https://nyla-backend.onrender.com/api/users/forgotpassword', { email });
+            await axios.post(`${BASE_URL}/api/users/forgotpassword`, { email });
             setIsSent(true);
             toast.success("Reset link sent to your email! ✉️");
         } catch (error) {

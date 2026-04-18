@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useProductStore } from '../../services/productStore';
 import { Edit2, Trash2, Plus, X, PackageOpen, Flame, UploadCloud } from 'lucide-react';
 import toast from 'react-hot-toast';
-
+import BASE_URL from '../../config';
 function AdminProducts() {
     const { products, deleteProduct, createProduct, updateProduct, isLoading } = useProductStore();
 
@@ -21,7 +21,7 @@ function AdminProducts() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const { data } = await axios.get('https://nyla-backend.onrender.com/api/categories');
+                const { data } = await axios.get(`${BASE_URL}/api/categories`);
                 setCategories(data);
             } catch (error) {
                 console.error("Failed to load categories", error);
@@ -41,7 +41,7 @@ function AdminProducts() {
 
         try {
             const config = { headers: { 'Content-Type': 'multipart/form-data' } };
-            const { data } = await axios.post('https://nyla-backend.onrender.com/api/upload', formDataToUpload, config);
+            const { data } = await axios.post(`${BASE_URL}/api/upload`, formDataToUpload, config);
 
             setFormData({ ...formData, imageUrl: data.url });
             toast.success('Image uploaded successfully! 📸');
@@ -276,7 +276,6 @@ function AdminProducts() {
                                 </div>
                             </div>
 
-                            {/* 📸 الجزء الخاص برفع الصورة */}
                             <div className="bg-[#FAF8F6] p-4 rounded-xl border border-petal-gray">
                                 <label className="block text-sm font-medium text-ink mb-2">Product Image</label>
                                 <div className="flex flex-col sm:flex-row gap-3">

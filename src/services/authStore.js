@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+import BASE_URL from '../../config';
 const userInfoFromStorage = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
     : null;
@@ -12,7 +12,7 @@ export const useAuthStore = create((set) => ({
     login: async (email, password) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await fetch('https://nyla-backend.onrender.com/api/users/login', {
+            const response = await fetch(`${BASE_URL}/api/users/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email, password }),
@@ -33,7 +33,7 @@ export const useAuthStore = create((set) => ({
     register: async (userData) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await fetch('https://nyla-backend.onrender.com/api/users', {
+            const response = await fetch(`${BASE_URL}/api/users/registe`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData),

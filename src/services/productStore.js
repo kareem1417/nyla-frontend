@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
-
+import BASE_URL from '../../config';
 export const useProductStore = create((set, get) => ({
     products: [],
     currentProduct: null,
@@ -10,7 +10,7 @@ export const useProductStore = create((set, get) => ({
     fetchProducts: async () => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.get('https://nyla-backend.onrender.com/api/products');
+            const response = await axios.get(`${BASE_URL}/api/products`);
             const productsData = response.data.products ? response.data.products : response.data;
             set({ products: productsData, isLoading: false });
         } catch (error) {
@@ -24,7 +24,7 @@ export const useProductStore = create((set, get) => ({
     fetchProductById: async (id) => {
         set({ isLoading: true, error: null });
         try {
-            const response = await axios.get(`https://nyla-backend.onrender.com/api/products/${id}`);
+            const response = await axios.get(`${BASE_URL}/api/products/${id}`);
             set({ currentProduct: response.data, isLoading: false });
         } catch (error) {
             set({
@@ -44,7 +44,7 @@ export const useProductStore = create((set, get) => ({
                 }
             };
 
-            await axios.post('https://nyla-backend.onrender.com/api/products', productData, config);
+            await axios.post(`${BASE_URL}/api/products`, productData, config);
 
             get().fetchProducts();
             return { success: true };
@@ -64,7 +64,7 @@ export const useProductStore = create((set, get) => ({
                 headers: { Authorization: `Bearer ${userInfo?.token}` }
             };
 
-            await axios.put(`https://nyla-backend.onrender.com/api/products/${id}`, productData, config);
+            await axios.put(`${BASE_URL}/api/products/${id}`, productData, config);
 
             get().fetchProducts();
             return { success: true };
@@ -87,7 +87,7 @@ export const useProductStore = create((set, get) => ({
                 }
             };
 
-            await axios.delete(`https://nyla-backend.onrender.com/api/products/${id}`, config);
+            await axios.delete(`${BASE_URL}/api/products/${id}`, config);
 
             get().fetchProducts();
             return { success: true };

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Users, Search, UserCheck, Mail, Phone, MapPin, Heart, PackageOpen, X, Calendar } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
+import BASE_URL from '../../config';
 function AdminUsers() {
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -18,7 +19,7 @@ function AdminUsers() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get('https://nyla-backend.onrender.com/api/users', config);
+            const { data } = await axios.get(`${BASE_URL}/api/users`, config);
             setUsers(data);
         } catch (error) {
             toast.error('Failed to load users');
@@ -37,7 +38,7 @@ function AdminUsers() {
         try {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo?.token}` } };
-            const { data } = await axios.get(`https://nyla-backend.onrender.com/api/users/${userId}/details`, config);
+            const { data } = await axios.get(`${BASE_URL}/api/users/${userId}/details`, config);
             setSelectedUser(data);
         } catch (error) {
             toast.error('Failed to load user details');

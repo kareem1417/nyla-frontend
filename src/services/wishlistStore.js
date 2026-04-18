@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-
+import BASE_URL from '../../config';
 const wishlistFromStorage = localStorage.getItem('wishlistItems')
     ? JSON.parse(localStorage.getItem('wishlistItems'))
     : [];
@@ -31,7 +31,7 @@ export const useWishlistStore = create((set, get) => ({
                     },
                 };
 
-                await axios.post('https://nyla-backend.onrender.com/api/users/wishlist', { productId: product._id }, config);
+                await axios.post(`${BASE_URL}/api/users/wishlist`, { productId: product._id }, config);
 
             } catch (error) {
                 console.error('Wishlist Sync Error:', error);

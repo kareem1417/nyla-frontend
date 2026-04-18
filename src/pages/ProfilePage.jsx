@@ -3,7 +3,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Package, User, Heart, Clock, CheckCircle, Truck, XCircle, MapPin, Phone, Map } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function ProfilePage() {
     const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState('orders');
@@ -47,7 +47,7 @@ function ProfilePage() {
     const fetchMyOrders = async (token) => {
         try {
             const config = { headers: { Authorization: `Bearer ${token}` } };
-            const { data } = await axios.get('https://nyla-backend.onrender.com/api/orders/myorders', config);
+            const { data } = await axios.get(`${BASE_URL}/api/orders/myorders`, config);
             setOrders(data);
         } catch (error) {
             toast.error('Failed to load your orders.');
@@ -61,7 +61,7 @@ function ProfilePage() {
         setUpdatingProfile(true);
         try {
             const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
-            const { data } = await axios.put('https://nyla-backend.onrender.com/api/users/profile', formData, config);
+            const { data } = await axios.put(`${BASE_URL}/api/users/profile`, formData, config);
 
             localStorage.setItem('userInfo', JSON.stringify(data));
             setUserInfo(data);

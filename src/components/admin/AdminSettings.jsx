@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Settings, Save } from 'lucide-react';
-
+import BASE_URL from '../../config';
 function AdminSettings() {
     const [shippingFee, setShippingFee] = useState(0);
     const [loading, setLoading] = useState(false);
@@ -10,7 +10,7 @@ function AdminSettings() {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const { data } = await axios.get('https://nyla-backend.onrender.com/api/settings');
+                const { data } = await axios.get(`${BASE_URL}/api/settings`);
                 setShippingFee(data.shippingFee);
             } catch (error) {
                 console.error("Error fetching settings", error);
@@ -26,7 +26,7 @@ function AdminSettings() {
             const userInfo = JSON.parse(localStorage.getItem('userInfo'));
             const config = { headers: { Authorization: `Bearer ${userInfo.token}` } };
 
-            await axios.put('https://nyla-backend.onrender.com/api/settings', { shippingFee: Number(shippingFee) }, config);
+            await axios.put(`${BASE_URL}/api/settings`, { shippingFee: Number(shippingFee) }, config);
             toast.success("Shipping fee updated successfully! 🚚");
         } catch (error) {
             toast.error("Failed to update shipping fee!");

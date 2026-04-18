@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import axios from 'axios';
-
+import BASE_URL from '../../config';
 const cartFromStorage = localStorage.getItem('nyla_cart')
     ? JSON.parse(localStorage.getItem('nyla_cart'))
     : [];
@@ -14,7 +14,7 @@ export const useCartStore = create((set, get) => ({
     shippingFee: 0,
     fetchShippingFee: async () => {
         try {
-            const { data } = await axios.get('https://nyla-backend.onrender.com/api/settings');
+            const { data } = await axios.get(`${BASE_URL}/api/settings`);
             set({ shippingFee: data.shippingFee });
         } catch (error) {
             console.error("Error fetching shipping fee", error);
