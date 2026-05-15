@@ -33,7 +33,7 @@ export const useAuthStore = create((set) => ({
     register: async (userData) => {
         set({ isLoading: true, error: null });
         try {
-            // جوه الفانكشن بتاعة register
+            // اللينك هنا بقى /api/users بس
             const response = await fetch(`${BASE_URL}/api/users`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
