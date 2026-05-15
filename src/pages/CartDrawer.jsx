@@ -59,8 +59,8 @@ function CartDrawer() {
                             <Gift size={16} />
                         </div>
                         <div>
-                            <p className="text-sm font-semibold text-green-800">Buy & Get Cheapest FREE!</p>
-                            <p className="text-xs text-green-600">Add 4+ items to get the cheapest one free.</p>
+                            <p className="text-sm font-semibold text-green-800">Buy 3 Get 1 FREE!</p>
+                            <p className="text-xs text-green-600">Add 4+ items to get one free</p>
                         </div>
                     </div>
                 )}
