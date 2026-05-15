@@ -72,6 +72,14 @@ function ProductDetailPage() {
         window.scrollTo(0, 0);
     }, [id]);
     const availableStock = selectedVariant ? selectedVariant.stock : (product?.stock || 100);
+
+    // Compute effective price considering discount
+    const hasDiscount = product?.isOnOffer && product?.discountPercentage > 0;
+    const rawPrice = selectedVariant ? (selectedVariant.basePrice || product?.basePrice) : product?.basePrice;
+    const effectivePrice = hasDiscount
+        ? (product?.discountedPrice || Math.round(product?.basePrice * (1 - product?.discountPercentage / 100)))
+        : rawPrice;
+
     const updateQuantity = (newQty) => {
         //if (!selectedVariant) return;
         if (newQty < 1) return;
@@ -88,7 +96,7 @@ function ProductDetailPage() {
             productName: product.name,
             variantLabel: selectedVariant ? selectedVariant.value : 'Standard',
             imageUrl: product.imageUrl,
-            unitPrice: selectedVariant ? (selectedVariant.basePrice || product.basePrice) : product.basePrice,
+            unitPrice: effectivePrice,
             quantity: quantity
         });
 
@@ -161,6 +169,12 @@ function ProductDetailPage() {
 
                 <div className="space-y-4 lg:sticky lg:top-28 mb-10 lg:mb-0">
                     <div className="w-full aspect-square bg-[#FDF9F6] rounded-card border border-petal-gray shadow-sm flex items-center justify-center overflow-hidden relative p-8">
+                        {/* Discount badge */}
+                        {hasDiscount && (
+                            <div className="absolute top-5 left-5 z-20 bg-gradient-to-r from-red-500 to-rose-600 text-white text-sm font-bold px-4 py-2 rounded-full shadow-lg">
+                                -{product?.discountPercentage}% OFF
+                            </div>
+                        )}
                         <img
                             src={product?.imageUrl}
                             alt={product?.name}
@@ -196,9 +210,25 @@ function ProductDetailPage() {
 
                     <div className="border-b border-petal-gray pb-6">
                         <div className="flex justify-between items-center mb-5">
-                            <p className="text-burgundy-800 text-3xl font-sans font-semibold">
-                                {selectedVariant?.basePrice || product?.basePrice} EGP
-                            </p>
+                            <div>
+                                {hasDiscount ? (
+                                    <div className="flex items-center gap-3 flex-wrap">
+                                        <p className="text-stone line-through text-xl font-sans">
+                                            {product?.basePrice} EGP
+                                        </p>
+                                        <p className="text-red-600 text-3xl font-sans font-bold">
+                                            {effectivePrice} EGP
+                                        </p>
+                                        <span className="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">
+                                            Save {product?.discountPercentage}%
+                                        </span>
+                                    </div>
+                                ) : (
+                                    <p className="text-burgundy-800 text-3xl font-sans font-semibold">
+                                        {selectedVariant?.basePrice || product?.basePrice} EGP
+                                    </p>
+                                )}
+                            </div>
                             {selectedVariant?.stock > 0 && selectedVariant?.stock < 10 && (
                                 <span className="text-copper-500 text-xs font-medium flex items-center gap-1.5 bg-copper-50 px-3 py-1 rounded-full">
                                     <CheckCircle size={14} /> Only {selectedVariant.stock} left in stock!

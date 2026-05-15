@@ -12,6 +12,13 @@ function ProductQuickView({ product, onClose }) {
 
     const addItem = useCartStore((state) => state.addItem);
 
+    // Compute effective price considering discount
+    const hasDiscount = product.isOnOffer && product.discountPercentage > 0;
+    const rawPrice = selectedVariant.basePrice || product.basePrice;
+    const effectivePrice = hasDiscount
+        ? (product.discountedPrice || Math.round(product.basePrice * (1 - product.discountPercentage / 100)))
+        : rawPrice;
+
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => { document.body.style.overflow = 'auto'; };
@@ -30,7 +37,7 @@ function ProductQuickView({ product, onClose }) {
             productName: product.name,
             variantLabel: selectedVariant.value || 'Standard',
             imageUrl: product.imageUrl,
-            unitPrice: selectedVariant.basePrice || product.basePrice,
+            unitPrice: effectivePrice,
             quantity: quantity
         });
         onClose();
@@ -53,6 +60,12 @@ function ProductQuickView({ product, onClose }) {
                 </button>
 
                 <div className="w-full md:w-1/2 bg-linen flex items-center justify-center p-8 relative">
+                    {/* Discount badge */}
+                    {hasDiscount && (
+                        <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-red-500 to-rose-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md">
+                            -{product.discountPercentage}% OFF
+                        </div>
+                    )}
                     <img
                         src={product.imageUrl}
                         alt={product.name}
@@ -68,9 +81,23 @@ function ProductQuickView({ product, onClose }) {
                 <div className="w-full md:w-1/2 p-8 flex flex-col justify-center overflow-y-auto">
                     <p className="text-xs text-stone uppercase tracking-widest mb-2">{product.category}</p>
                     <h2 className="text-3xl font-display text-ink mb-2">{product.name}</h2>
-                    <p className="text-burgundy-800 text-2xl font-semibold mb-6">
-                        {selectedVariant.basePrice || product.basePrice} EGP
-                    </p>
+                    {hasDiscount ? (
+                        <div className="flex items-center gap-3 mb-6 flex-wrap">
+                            <p className="text-stone line-through text-lg">
+                                {product.basePrice} EGP
+                            </p>
+                            <p className="text-red-600 text-2xl font-bold">
+                                {effectivePrice} EGP
+                            </p>
+                            <span className="bg-red-100 text-red-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                                Save {product.discountPercentage}%
+                            </span>
+                        </div>
+                    ) : (
+                        <p className="text-burgundy-800 text-2xl font-semibold mb-6">
+                            {rawPrice} EGP
+                        </p>
+                    )}
 
                     <p className="text-stone text-sm mb-6 line-clamp-3">
                         {product.description}

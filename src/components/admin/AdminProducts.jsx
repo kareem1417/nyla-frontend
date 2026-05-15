@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useProductStore } from '../../services/productStore';
-import { Edit2, Trash2, Plus, X, PackageOpen, Flame, UploadCloud } from 'lucide-react';
+import { Edit2, Trash2, Plus, X, PackageOpen, Flame, UploadCloud, Tag } from 'lucide-react';
 import toast from 'react-hot-toast';
 import BASE_URL from '../../config';
 function AdminProducts() {
@@ -15,7 +15,8 @@ function AdminProducts() {
     const [formData, setFormData] = useState({
         name: '', basePrice: '', category: '', imageUrl: '',
         description: '', ingredients: '', howToUse: '', size: '', variants: [],
-        isBestSeller: false
+        isBestSeller: false,
+        isOnOffer: false, discountPercentage: '', discountEndDate: ''
     });
 
     useEffect(() => {
@@ -81,7 +82,10 @@ function AdminProducts() {
             name: product.name, basePrice: product.basePrice, category: product.category,
             imageUrl: product.imageUrl, description: product.description, ingredients: product.ingredients || '',
             howToUse: product.howToUse || '', size: product.size || '', variants: product.variants || [],
-            isBestSeller: product.isBestSeller || false
+            isBestSeller: product.isBestSeller || false,
+            isOnOffer: product.isOnOffer || false,
+            discountPercentage: product.discountPercentage || '',
+            discountEndDate: product.discountEndDate ? product.discountEndDate.slice(0, 10) : ''
         });
         setIsModalOpen(true);
     };
@@ -90,7 +94,8 @@ function AdminProducts() {
         setEditingId(null);
         setFormData({
             name: '', basePrice: '', category: '', imageUrl: '', description: '', ingredients: '',
-            howToUse: '', size: '', variants: [], isBestSeller: false
+            howToUse: '', size: '', variants: [], isBestSeller: false,
+            isOnOffer: false, discountPercentage: '', discountEndDate: ''
         });
         setIsModalOpen(true);
     };
@@ -99,7 +104,12 @@ function AdminProducts() {
         e.preventDefault();
         if (!formData.category) return toast.error("Please select a category!");
 
-        const productData = { ...formData, basePrice: Number(formData.basePrice) };
+        const productData = {
+            ...formData,
+            basePrice: Number(formData.basePrice),
+            discountPercentage: formData.isOnOffer ? Number(formData.discountPercentage) : 0,
+            discountEndDate: formData.isOnOffer && formData.discountEndDate ? formData.discountEndDate : null
+        };
 
         let res;
         if (editingId) res = await updateProduct(editingId, productData);
@@ -137,7 +147,15 @@ function AdminProducts() {
                                         )}
                                     </div>
                                     <div className="text-xs text-stone">{product.category}</div>
-                                    <div className="font-semibold text-burgundy-800 mt-1">{product.basePrice} EGP</div>
+                                    {product.isOnOffer && product.discountPercentage > 0 ? (
+                                        <div className="flex items-center gap-2 mt-1 flex-wrap">
+                                            <span className="text-stone line-through text-xs">{product.basePrice} EGP</span>
+                                            <span className="font-semibold text-red-600">{product.discountedPrice || Math.round(product.basePrice * (1 - product.discountPercentage / 100))} EGP</span>
+                                            <span className="bg-red-100 text-red-700 text-[10px] px-1.5 py-0.5 rounded-full font-bold">-{product.discountPercentage}%</span>
+                                        </div>
+                                    ) : (
+                                        <div className="font-semibold text-burgundy-800 mt-1">{product.basePrice} EGP</div>
+                                    )}
                                 </div>
                                 <div className="flex flex-col gap-2">
                                     <button onClick={() => handleEditClick(product)} className="p-2 text-stone hover:text-ink bg-[#FAF8F6] rounded-lg border border-petal-gray transition-colors"><Edit2 size={16} /></button>
@@ -200,7 +218,19 @@ function AdminProducts() {
                                         </div>
                                         <div className="text-xs text-stone">{product.category}</div>
                                     </td>
-                                    <td className="px-6 py-4 font-semibold text-burgundy-800">{product.basePrice} EGP</td>
+                                    <td className="px-6 py-4">
+                                        {product.isOnOffer && product.discountPercentage > 0 ? (
+                                            <div className="flex items-center gap-2 flex-wrap">
+                                                <span className="text-stone line-through text-sm">{product.basePrice} EGP</span>
+                                                <span className="font-semibold text-red-600">{product.discountedPrice || Math.round(product.basePrice * (1 - product.discountPercentage / 100))} EGP</span>
+                                                <span className="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1 border border-red-200">
+                                                    <Tag size={10} className="fill-current" /> -{product.discountPercentage}%
+                                                </span>
+                                            </div>
+                                        ) : (
+                                            <span className="font-semibold text-burgundy-800">{product.basePrice} EGP</span>
+                                        )}
+                                    </td>
 
                                     <td className="px-6 py-4">
                                         <div className="text-xs text-stone font-medium mb-1 border-b border-petal-gray pb-1 inline-block">Size: {product.size || '-'}</div>
@@ -306,6 +336,31 @@ function AdminProducts() {
                                     </div>
                                 </div>
                                 {uploading && <p className="text-xs text-burgundy-800 mt-2 animate-pulse">Uploading image to secure cloud... please wait.</p>}
+                            </div>
+
+                            {/* Offer / Discount Section */}
+                            <div className="border-t border-petal-gray pt-4 mt-2">
+                                <div className="flex items-center gap-3 p-4 bg-red-50/50 rounded-xl border border-red-100 hover:bg-red-50 transition-colors mb-3">
+                                    <input type="checkbox" id="isOnOffer" checked={formData.isOnOffer} onChange={(e) => setFormData({ ...formData, isOnOffer: e.target.checked })} className="w-5 h-5 text-red-600 rounded focus:ring-red-500 cursor-pointer" />
+                                    <label htmlFor="isOnOffer" className="text-sm font-semibold text-red-800 cursor-pointer flex items-center gap-2 select-none"><Tag size={16} className="text-red-600" /> Enable Offer / Discount</label>
+                                </div>
+                                {formData.isOnOffer && (
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 p-4 bg-red-50/30 rounded-xl border border-red-100">
+                                        <div>
+                                            <label className="block text-sm font-medium text-ink mb-1">Discount %</label>
+                                            <input type="number" min="1" max="99" placeholder="e.g. 30" required={formData.isOnOffer} value={formData.discountPercentage} onChange={(e) => setFormData({ ...formData, discountPercentage: e.target.value })} className="w-full border border-petal-gray rounded-xl px-4 py-2.5 focus:outline-none focus:border-red-500" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-medium text-ink mb-1">End Date <span className="text-stone font-normal">(optional)</span></label>
+                                            <input type="date" value={formData.discountEndDate} onChange={(e) => setFormData({ ...formData, discountEndDate: e.target.value })} className="w-full border border-petal-gray rounded-xl px-4 py-2.5 focus:outline-none focus:border-red-500" />
+                                        </div>
+                                        {formData.discountPercentage > 0 && formData.basePrice > 0 && (
+                                            <div className="sm:col-span-2 text-sm text-stone">
+                                                Preview: <span className="line-through">{formData.basePrice} EGP</span> → <span className="text-red-600 font-bold">{Math.round(Number(formData.basePrice) * (1 - Number(formData.discountPercentage) / 100))} EGP</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
 
                             <div className="flex items-center gap-3 p-4 bg-orange-50/50 rounded-xl border border-orange-100 hover:bg-orange-50 transition-colors">
