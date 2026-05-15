@@ -12,13 +12,36 @@ export const useCartStore = create((set, get) => ({
     cartTotal: cartFromStorage.reduce((acc, item) => acc + (item.unitPrice * item.quantity), 0),
 
     shippingFee: 0,
+    buyXGetCheapestFree: false,
+
     fetchShippingFee: async () => {
         try {
             const { data } = await axios.get(`${BASE_URL}/api/settings`);
-            set({ shippingFee: data.shippingFee });
+            set({
+                shippingFee: data.shippingFee,
+                buyXGetCheapestFree: data.buyXGetCheapestFree || false,
+            });
         } catch (error) {
             console.error("Error fetching shipping fee", error);
         }
+    },
+
+    // Compute the cheapest item's unit price when the offer is active
+    getFreeItemSaving: () => {
+        const { cartItems, buyXGetCheapestFree } = get();
+        if (!buyXGetCheapestFree || cartItems.length < 2) {
+            return { saving: 0, freeItemName: null };
+        }
+        let cheapestPrice = Infinity;
+        let freeItemName = null;
+        for (const item of cartItems) {
+            if (item.unitPrice < cheapestPrice) {
+                cheapestPrice = item.unitPrice;
+                freeItemName = item.productName;
+            }
+        }
+        if (cheapestPrice === Infinity) return { saving: 0, freeItemName: null };
+        return { saving: Math.round(cheapestPrice * 100) / 100, freeItemName };
     },
 
     addItem: (newItem) => {

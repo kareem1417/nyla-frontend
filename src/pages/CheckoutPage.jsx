@@ -7,7 +7,7 @@ import { useCartStore } from '../services/cartStore';
 import BASE_URL from '../../config';
 function CheckoutPage() {
     const navigate = useNavigate();
-    const { cartItems, clearCart, cartTotal, shippingFee, fetchShippingFee } = useCartStore();
+    const { cartItems, clearCart, cartTotal, shippingFee, fetchShippingFee, getFreeItemSaving, buyXGetCheapestFree } = useCartStore();
 
     const [isLoading, setIsLoading] = useState(false);
     const [couponCodeInput, setCouponCodeInput] = useState('');
@@ -15,10 +15,27 @@ function CheckoutPage() {
     const [appliedCoupon, setAppliedCoupon] = useState(null);
 
     const FREE_SHIPPING_THRESHOLD = 750;
-    const discountAmount = appliedCoupon ? (cartTotal * appliedCoupon.discountPercentage) / 100 : 0;
-    const subtotalAfterDiscount = cartTotal - discountAmount;
+
+    // Free item offer calculation
+    const { saving: freeItemSaving, freeItemName } = getFreeItemSaving();
+    const subtotalAfterFreeItem = cartTotal - freeItemSaving;
+
+    const discountAmount = appliedCoupon ? (subtotalAfterFreeItem * appliedCoupon.discountPercentage) / 100 : 0;
+    const subtotalAfterDiscount = subtotalAfterFreeItem - discountAmount;
     const effectiveShipping = subtotalAfterDiscount >= FREE_SHIPPING_THRESHOLD ? 0 : shippingFee;
     const finalTotal = subtotalAfterDiscount + effectiveShipping;
+
+    // Find the cheapest item key to tag it
+    let cheapestKey = null;
+    if (buyXGetCheapestFree && cartItems.length >= 2) {
+        let cheapestPrice = Infinity;
+        for (const item of cartItems) {
+            if (item.unitPrice < cheapestPrice) {
+                cheapestPrice = item.unitPrice;
+                cheapestKey = `${item.productId}-${item.variantId}`;
+            }
+        }
+    }
 
     const [formData, setFormData] = useState({
         customerName: '', customerEmail: '', phone: '', address: '',
@@ -148,17 +165,35 @@ function CheckoutPage() {
                         <h2 className="text-xl font-display text-ink mb-6">Order Summary</h2>
 
                         <div className="space-y-4 mb-6 max-h-60 overflow-y-auto pr-2">
-                            {cartItems.map((item, index) => (
-                                <div key={index} className="flex gap-4 items-center border-b border-petal-gray/50 pb-4 last:border-0 last:pb-0">
-                                    <img src={item.imageUrl || item.image} alt={item.productName} className="w-16 h-16 object-cover rounded-xl bg-white" />
-                                    <div className="flex-1">
-                                        <h4 className="text-sm font-medium text-ink">{item.productName}</h4>
-                                        {item.variantLabel && item.variantLabel !== 'Standard' && (<span className="text-xs text-stone block mt-1">Shade: {item.variantLabel}</span>)}
-                                        <span className="text-xs text-stone mt-1 block">Qty: {item.quantity}</span>
+                            {cartItems.map((item, index) => {
+                                const itemKey = `${item.productId}-${item.variantId}`;
+                                const isFreeItem = itemKey === cheapestKey;
+                                return (
+                                    <div key={index} className={`flex gap-4 items-center border-b pb-4 last:border-0 last:pb-0 ${isFreeItem ? 'border-green-200' : 'border-petal-gray/50'}`}>
+                                        <div className="relative">
+                                            <img src={item.imageUrl || item.image} alt={item.productName} className="w-16 h-16 object-cover rounded-xl bg-white" />
+                                            {isFreeItem && (
+                                                <span className="absolute -top-1.5 -right-1.5 bg-green-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">FREE</span>
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <h4 className="text-sm font-medium text-ink">{item.productName}</h4>
+                                            {item.variantLabel && item.variantLabel !== 'Standard' && (<span className="text-xs text-stone block mt-1">Shade: {item.variantLabel}</span>)}
+                                            <span className="text-xs text-stone mt-1 block">Qty: {item.quantity}</span>
+                                        </div>
+                                        <div className="font-semibold text-sm">
+                                            {isFreeItem ? (
+                                                <div className="text-right">
+                                                    <span className="line-through text-stone text-xs block">{item.unitPrice} EGP</span>
+                                                    <span className="text-green-600 font-bold">FREE 🎁</span>
+                                                </div>
+                                            ) : (
+                                                <span className="text-burgundy-800">{item.unitPrice * item.quantity} EGP</span>
+                                            )}
+                                        </div>
                                     </div>
-                                    <div className="font-semibold text-burgundy-800 text-sm">{item.unitPrice * item.quantity} EGP</div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
 
                         <div className="mb-6 pt-4 border-t border-petal-gray">
@@ -200,6 +235,13 @@ function CheckoutPage() {
                             )}
                             {effectiveShipping > 0 && (FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount) <= 200 && (
                                 <p className="text-xs text-burgundy-800 text-right">Add {(FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount).toFixed(0)} EGP more for free shipping!</p>
+                            )}
+
+                            {freeItemSaving > 0 && (
+                                <div className="flex justify-between text-green-600 text-sm font-medium">
+                                    <span>🎁 Free Item ({freeItemName})</span>
+                                    <span>-{freeItemSaving} EGP</span>
+                                </div>
                             )}
 
                             {appliedCoupon && (
