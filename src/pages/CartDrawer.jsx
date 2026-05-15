@@ -60,7 +60,7 @@ function CartDrawer() {
                         </div>
                         <div>
                             <p className="text-sm font-semibold text-green-800">Buy & Get Cheapest FREE!</p>
-                            <p className="text-xs text-green-600">Add 2+ different items to get the cheapest one free.</p>
+                            <p className="text-xs text-green-600">Add 4+ items to get the cheapest one free.</p>
                         </div>
                     </div>
                 )}
