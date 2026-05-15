@@ -29,19 +29,37 @@ export const useCartStore = create((set, get) => ({
     // Compute the cheapest item's unit price when the offer is active
     getFreeItemSaving: () => {
         const { cartItems, buyXGetCheapestFree } = get();
-        if (!buyXGetCheapestFree || cartItems.length < 2) {
+
+        // لو العرض مقفول من الإعدادات، مفيش خصم
+        if (!buyXGetCheapestFree) {
             return { saving: 0, freeItemName: null };
         }
-        let cheapestPrice = Infinity;
-        let freeItemName = null;
+
+        // 1. فك المنتجات كلها في مصفوفة واحدة (عشان نقدر نحسب القطع المتكررة)
+        let allItemsExpanded = [];
         for (const item of cartItems) {
-            if (item.unitPrice < cheapestPrice) {
-                cheapestPrice = item.unitPrice;
-                freeItemName = item.productName;
+            for (let i = 0; i < item.quantity; i++) {
+                allItemsExpanded.push({ price: item.unitPrice, name: item.productName });
             }
         }
-        if (cheapestPrice === Infinity) return { saving: 0, freeItemName: null };
-        return { saving: Math.round(cheapestPrice * 100) / 100, freeItemName };
+
+        // 2. حساب عدد القطع المجانية (كل 4 قطع في الكارت ليهم 1 فري)
+        const totalQty = allItemsExpanded.length;
+        const freeItemsCount = Math.floor(totalQty / 4);
+
+        if (freeItemsCount === 0) return { saving: 0, freeItemName: null };
+
+        // 3. ترتيب المنتجات من الأرخص للأغلى
+        allItemsExpanded.sort((a, b) => a.price - b.price);
+
+        // 4. ناخد أول مجموعة (الأرخص) على قد عدد القطع المجانية ونجمع سعرهم
+        const freeItems = allItemsExpanded.slice(0, freeItemsCount);
+        const saving = freeItems.reduce((sum, item) => sum + item.price, 0);
+
+        // 5. نجيب أسامي المنتجات الفري بدون تكرار عشان نعرضها للعميل
+        const uniqueNames = [...new Set(freeItems.map(i => i.name))].join(' & ');
+
+        return { saving: Math.round(saving * 100) / 100, freeItemName: uniqueNames };
     },
 
     addItem: (newItem) => {
