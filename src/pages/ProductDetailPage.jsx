@@ -214,10 +214,10 @@ function ProductDetailPage() {
                                 {hasDiscount ? (
                                     <div className="flex items-center gap-3 flex-wrap">
                                         <p className="text-stone line-through text-xl font-sans">
-                                            {product?.basePrice} EGP
+                                            {product?.basePrice * quantity} EGP
                                         </p>
                                         <p className="text-red-600 text-3xl font-sans font-bold">
-                                            {effectivePrice} EGP
+                                            {effectivePrice * quantity} EGP
                                         </p>
                                         <span className="bg-red-100 text-red-700 text-xs font-bold px-3 py-1 rounded-full">
                                             Save {product?.discountPercentage}%
@@ -225,7 +225,7 @@ function ProductDetailPage() {
                                     </div>
                                 ) : (
                                     <p className="text-burgundy-800 text-3xl font-sans font-semibold">
-                                        {selectedVariant?.basePrice || product?.basePrice} EGP
+                                        {rawPrice * quantity} EGP
                                     </p>
                                 )}
                             </div>
