@@ -52,7 +52,7 @@ function CartDrawer() {
                                     <div className="flex-1">
                                         <h3 className="text-sm font-semibold text-ink line-clamp-1 pr-6">{item.productName}</h3>
                                         <p className="text-xs text-stone mt-0.5">Variant: {item.variantLabel}</p>
-                                        <p className="text-burgundy-800 font-bold mt-2">{item.unitPrice} EGP</p>
+                                        <p className="text-burgundy-800 font-bold mt-2">{item.unitPrice * item.quantity} EGP</p>
 
                                         <div className="flex items-center gap-3 mt-3">
                                             <div className="flex items-center gap-1 border border-petal-gray rounded-full px-1 bg-white">

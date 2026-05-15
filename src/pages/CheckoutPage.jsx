@@ -14,8 +14,11 @@ function CheckoutPage() {
     const [isVerifyingCoupon, setIsVerifyingCoupon] = useState(false);
     const [appliedCoupon, setAppliedCoupon] = useState(null);
 
+    const FREE_SHIPPING_THRESHOLD = 750;
     const discountAmount = appliedCoupon ? (cartTotal * appliedCoupon.discountPercentage) / 100 : 0;
-    const finalTotal = (cartTotal - discountAmount) + shippingFee;
+    const subtotalAfterDiscount = cartTotal - discountAmount;
+    const effectiveShipping = subtotalAfterDiscount >= FREE_SHIPPING_THRESHOLD ? 0 : shippingFee;
+    const finalTotal = subtotalAfterDiscount + effectiveShipping;
 
     const [formData, setFormData] = useState({
         customerName: '', customerEmail: '', phone: '', address: '',
@@ -84,7 +87,7 @@ function CheckoutPage() {
                 },
                 paymentMethod: 'Cash On Delivery',
                 itemsPrice: cartTotal,
-                shippingPrice: shippingFee,
+                shippingPrice: effectiveShipping,
                 couponCode: appliedCoupon?.code || null,
                 orderItems: cartItems.map((item) => ({
                     name: item.productName, qty: item.quantity, image: item.imageUrl || item.image,
@@ -188,8 +191,16 @@ function CheckoutPage() {
 
                             <div className="flex justify-between text-stone text-sm">
                                 <span>Shipping Fee</span>
-                                <span>{shippingFee === 0 ? 'Free' : `+${shippingFee} EGP`}</span>
+                                <span className={effectiveShipping === 0 ? 'text-green-600 font-semibold' : ''}>
+                                    {effectiveShipping === 0 ? '🎉 FREE' : `+${effectiveShipping} EGP`}
+                                </span>
                             </div>
+                            {effectiveShipping === 0 && (
+                                <p className="text-xs text-green-600 text-right">Free shipping applied! (order over {FREE_SHIPPING_THRESHOLD} EGP)</p>
+                            )}
+                            {effectiveShipping > 0 && (FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount) <= 200 && (
+                                <p className="text-xs text-burgundy-800 text-right">Add {(FREE_SHIPPING_THRESHOLD - subtotalAfterDiscount).toFixed(0)} EGP more for free shipping!</p>
+                            )}
 
                             {appliedCoupon && (
                                 <div className="flex justify-between text-green-600 text-sm font-medium">

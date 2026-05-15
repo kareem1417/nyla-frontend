@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Gift } from 'lucide-react'; // ضفنا الأيقونة دي للعرض
 import ProductCard from '../components/ui/ProductCard';
 import { useProductStore } from '../services/productStore';
 
@@ -11,6 +12,7 @@ function HomePage() {
     return (
         <div className="animate-fade-in">
 
+            {/* Hero Section */}
             <section
                 className="relative pt-28 pb-32 px-6 md:pt-32 md:pb-40 md:px-16 lg:px-24 overflow-hidden bg-cover bg-[80%_center] md:bg-center bg-no-repeat flex items-center min-h-[550px] md:min-h-[700px]"
                 style={{
@@ -34,19 +36,47 @@ function HomePage() {
                 </div>
             </section>
 
+            {/* Marquee Banner */}
             <div className="bg-burgundy-800 text-white py-3 overflow-hidden flex whitespace-nowrap">
                 <div className="animate-marquee inline-block font-sans text-sm tracking-widest uppercase">
                     <span className="mx-8">✨ 100% Natural Ingredients</span>
                     <span className="mx-8">✨ Cruelty Free</span>
                     <span className="mx-8">✨ Handcrafted in Egypt</span>
-                    <span className="mx-8">✨ Free Shipping on orders over 1000 EGP</span>
+                    {/* تعديل الرقم هنا */}
+                    <span className="mx-8">✨ Free Shipping on orders over 750 EGP</span>
                     <span className="mx-8">✨ Beta Version </span>
-
-
                 </div>
             </div>
 
-            <section className="max-w-7xl mx-auto px-6 lg:px-8 py-24 text-center">
+            {/* 🌟 New Stylish Promo Banner 🌟 */}
+            <section className="max-w-5xl mx-auto px-6 lg:px-8 mt-16">
+                <div className="bg-[#FAF8F6] border border-petal-gray rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-center justify-between shadow-sm relative overflow-hidden">
+                    {/* لمسة تصميم (شكل دائري خفيف في الخلفية) */}
+                    <div className="absolute -right-10 -top-10 w-40 h-40 bg-burgundy-800/5 rounded-full blur-2xl pointer-events-none"></div>
+
+                    <div className="flex flex-col md:flex-row items-center gap-5 text-center md:text-left mb-6 md:mb-0 relative z-10">
+                        <div className="bg-burgundy-800 text-white p-3.5 rounded-full shadow-sm">
+                            <Gift size={24} />
+                        </div>
+                        <div>
+                            <h3 className="text-2xl font-display text-ink mb-1">Special Treat For You!</h3>
+                            <p className="text-stone text-sm md:text-base">
+                                Enjoy <span className="font-bold text-burgundy-800">FREE SHIPPING</span> on all orders over <span className="font-bold text-ink">750 EGP</span>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <Link
+                        to="/shop"
+                        className="relative z-10 px-8 py-3 border border-burgundy-800 text-burgundy-800 rounded-full font-medium hover:bg-burgundy-800 hover:text-white transition-all w-full md:w-auto text-center"
+                    >
+                        Claim Offer
+                    </Link>
+                </div>
+            </section>
+
+            {/* Best Sellers Section */}
+            <section className="max-w-7xl mx-auto px-6 lg:px-8 py-20 text-center">
                 <div className="flex justify-between items-end mb-16 border-b border-petal-gray pb-4">
                     <h2 className="text-4xl text-left font-display text-ink">Best Sellers</h2>
                     <Link to="/shop" className="text-sm font-medium font-sans hover:text-burgundy-800 transition-colors">View All →</Link>
