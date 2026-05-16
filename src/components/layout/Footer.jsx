@@ -1,16 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom'; // 👈 ضفنا useNavigate هنا
 import { MapPin, Mail, Phone, Facebook, Instagram } from 'lucide-react';
 import TikTokIcon from '../ui/TikTokIcon';
 
-
-
 function Footer() {
+    const navigate = useNavigate(); // 👈 فعلنا الـ hook هنا
+
     const socialLinks = [
-        { icon: Facebook, href: '#', name: 'Facebook' },
-        { icon: Instagram, href: '#', name: 'Instagram' },
-        { icon: TikTokIcon, href: '#', name: 'TikTok' },
+        { icon: Facebook, href: 'https://www.facebook.com/share/1BAF4fEX5T/', name: 'Facebook' },
+        { icon: Instagram, href: 'https://www.instagram.com/ny_la__?igsh=dTBodWZxdHE0NjQ4', name: 'Instagram' },
+        { icon: TikTokIcon, href: 'https://www.tiktok.com/@nyla_cosmetics1?_r=1&_t=ZS-96P9xog2DU0', name: 'TikTok' },
     ];
+
+    // 👈 الفانكشن اللي هتنقله لصفحة التسجيل لما يدوس
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        navigate('/login'); // بنوجهه لصفحة اللوجين/التسجيل
+    };
 
     return (
         <footer className="bg-linen/50 border-t border-petal-gray text-charcoal font-sans mt-24">
@@ -23,16 +29,16 @@ function Footer() {
                     <div className="space-y-4 text-stone">
                         <div className="flex items-start gap-3">
                             <MapPin size={20} className="text-burgundy-800 shrink-0 mt-0.5" />
-                            <span>Cairo, Egypt
-                                (Online Store Only currently)</span>
+                            <span>Cairo, Egypt<br />(Online Store Only currently)</span>
                         </div>
                         <div className="flex items-center gap-3">
                             <Mail size={18} className="text-burgundy-800" />
-                            <a href="mailto:info@elle-cosmetics.com" className="hover:text-burgundy-800 transition-colors">info@elle-cosmetics.com</a>
+                            <a href="mailto:nylaabeauty@gmail.com" className="hover:text-burgundy-800 transition-colors">nylaabeauty@gmail.com</a>
                         </div>
                         <div className="flex items-center gap-3">
                             <Phone size={18} className="text-burgundy-800" />
-                            <a href="tel:+201040355508" className="hover:text-burgundy-800 transition-colors"></a>
+                            {/* ضفتلك رقم التليفون عشان كان فاضي في الكود بتاعك */}
+                            <a href="" className="hover:text-burgundy-800 transition-colors"></a>
                         </div>
                     </div>
                     <div className="flex gap-4 pt-2">
@@ -66,10 +72,12 @@ function Footer() {
 
                 <div className="space-y-4">
                     <h3 className="font-medium text-ink text-base">Subscribe</h3>
-                    <p className="text-stone">Subscribe to our newsletter and get 10% off your first order!</p>
-                    <form className="flex flex-col gap-3" onSubmit={(e) => e.preventDefault()}>
+                    <p className="text-stone">Subscribe to our newsletter and get 5% off your first order!</p>
+                    {/* 👈 ربطنا الفورم بالفانكشن الجديدة هنا */}
+                    <form className="flex flex-col gap-3" onSubmit={handleSubscribe}>
                         <input
                             type="email"
+                            required // 👈 خليته إجباري عشان ميبعتش الفورم فاضية
                             placeholder="Your email address"
                             className="w-full border border-petal-gray rounded-btn px-4 py-2.5 focus:outline-none focus:border-burgundy-800 transition-colors text-sm bg-white"
                         />
