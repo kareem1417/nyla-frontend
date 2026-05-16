@@ -27,7 +27,7 @@ function CheckoutPage() {
 
     // Find the cheapest item key to tag it
     let cheapestKey = null;
-    if (buyXGetCheapestFree && cartItems.length >= 2) {
+    if (buyXGetCheapestFree && cartItems.length >= 4) {
         let cheapestPrice = Infinity;
         for (const item of cartItems) {
             if (item.unitPrice < cheapestPrice) {
