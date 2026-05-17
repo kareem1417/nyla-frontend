@@ -23,7 +23,7 @@ function ContactPage() {
                             </div>
                             <div>
                                 <h3 className="font-sans font-medium text-ink text-lg">Email Us</h3>
-                                <p className="text-stone">hello@nylacosmetics.com</p>
+                                <p className="text-stone">nylaabeauty@gmail.com.com</p>
                                 <p className="text-stone text-sm mt-1">We aim to reply within 24 hours.</p>
                             </div>
                         </div>
@@ -34,7 +34,7 @@ function ContactPage() {
                             </div>
                             <div>
                                 <h3 className="font-sans font-medium text-ink text-lg">Call Us</h3>
-                                <p className="text-stone">+20 100 123 4567</p>
+                                <p className="text-stone"></p>
                             </div>
                         </div>
 
