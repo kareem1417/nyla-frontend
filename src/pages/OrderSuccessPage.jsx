@@ -8,16 +8,23 @@ function OrderSuccessPage() {
     const order = location.state?.order;
     useEffect(() => {
         if (window.fbq && order) {
-            window.fbq('track', 'Purchase', {
-                value: order.totalPrice,
-                currency: 'EGP'
-            });
+            console.log("Preparing to fire FB Events for order value:", order.totalPrice);
+
+            // تأخير 500 ملي ثانية عشان إضافة المتصفح تلحق تركز مع الصفحة الجديدة
+            setTimeout(() => {
+                // 1. نبلغ فيسبوك إننا فتحنا صفحة جديدة (مهم جداً في الرياكت)
+                window.fbq('track', 'PageView');
+
+                // 2. نبلغ عن عملية الشراء وقيمتها
+                window.fbq('track', 'Purchase', {
+                    value: order.totalPrice,
+                    currency: 'EGP'
+                });
+
+                console.log("FB Purchase Event Fired Successfully! ✅");
+            }, 500);
         }
     }, [order]);
-    const handlePrint = () => {
-        window.print();
-    };
-
     return (
         <div className="min-h-[75vh] flex flex-col items-center justify-center px-4 py-12 animate-fade-in print:py-0">
 
