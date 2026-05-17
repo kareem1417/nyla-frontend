@@ -1,12 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { CheckCircle, ShoppingBag, Printer } from 'lucide-react';
-import InvoiceTicket from '../components/InvoiceTicket'; 
+import InvoiceTicket from '../components/InvoiceTicket';
 
 function OrderSuccessPage() {
     const location = useLocation();
     const order = location.state?.order;
-
+    useEffect(() => {
+        if (window.fbq && order) {
+            window.fbq('track', 'Purchase', {
+                value: order.totalPrice,
+                currency: 'EGP'
+            });
+        }
+    }, [order]);
     const handlePrint = () => {
         window.print();
     };
